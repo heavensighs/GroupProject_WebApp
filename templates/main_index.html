@@ -1,0 +1,22 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Main</h2>
+        <form action="/sport" method="post">
+            <p><input type="submit" value="Sport Management"></p>
+        </form>
+        <form action="/diet" method="post">
+            <p><input type="submit" value="Diet Management"></p>
+        </form>
+        <form action="/health" method="post">
+            <p><input type="submit" value="Health Management"></p>
+        </form>
+        <form action="/" method="post">
+            <p><input type="submit" value="End"></p>
+        </form>
+    </div>
+</body>

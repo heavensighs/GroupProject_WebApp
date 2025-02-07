@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customized Workout Plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 Customize Your Workout Plan</h1>
+    <form action="/sport/generate_plan" method="POST">
+        
+        <div class="form-group">
+            <label>1. Do you have any injuries?</label>
+            <select name="injury">
+                <option value="Knees">Knees</option>
+                <option value="Waist">Waist</option>
+                <option value="None">None</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>2. Choose your body type:</label>
+            <select name="body_type">
+                <option value="Straight">Straight</option>
+                <option value="Pear">Pear</option>
+                <option value="Hourglass">Hourglass</option>
+                <option value="Apple">Apple</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>3. What type of exercise do you prefer?</label>
+            <select name="sports_preference">
+                <option value="Class">Exercise Class</option>
+                <option value="Jumping Rope">Jumping Rope</option>
+                <option value="Running">Running</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>4. How long do you want to exercise each day?</label>
+            <select name="exercise_time">
+                <option value="20min">20 minutes</option>
+                <option value="30min">30 minutes</option>
+                <option value="40min">40 minutes</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>5. Maximum number of push-ups you can do:</label>
+            <select name="pushups">
+                <option value="None">Never tried or can't do one</option>
+                <option value="10">Less than 10</option>
+                <option value="10-20">10-20</option>
+                <option value="20-30">20-30</option>
+                <option value="30+">More than 30</option>
+            </select>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

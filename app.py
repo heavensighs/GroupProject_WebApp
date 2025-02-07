@@ -1,14 +1,116 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
 import google.generativeai as genai
-
-api_key = '12221dd003c94483a56acc23fa8bcd16'
-
-genai.configure(api_key="AIzaSyBRuD5dvIrCBTDllqGo5mOy_bg4uMBRA6M")
-model = genai.GenerativeModel("gemini-1.5-flash")
+import sqlite3
+import os
+from datetime import datetime
+import logging
+import re
 
 app = Flask(__name__)
 
+genai.configure(api_key="AIzaSyBRuD5dvIrCBTDllqGo5mOy_bg4uMBRA6M")
+model = genai.GenerativeModel("gemini-1.5-flash")
+model1 = genai.GenerativeModel("gemini-pro")
+
+api_key = '12221dd003c94483a56acc23fa8bcd16'   # spoonacular.com Food API 
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+
+# Main Menu ---------------------------------------------------------------------------------
+@app.route("/", methods=["GET", "POST"])
+def index():
+    return render_template("main_index.html")
+
+
+# Funtion1: Sport ---------------------------------------------------------------------------
+
+# 🎯 运动计划页面
+@app.route('/sport', methods=["GET", "POST"])
+def home():
+    return render_template('1_sport/index.html')
+
+@app.route('/sport/form', methods=["GET", "POST"])
+def form():
+    return render_template('1_sport/form.html')
+
+@app.route('/sport/generate_plan', methods=['POST'])
+def generate_plan():
+    user_data = request.form
+
+    prompt = "Generate a customized workout plan based on these inputs:\n"
+    for key, value in user_data.items():
+        prompt += f"{key}: {value}\n"
+
+    try:
+        response = model1.generate_content(prompt)
+        plan = response.text if response.text else "No response received."
+    except Exception as e:
+        plan = f"Error: {str(e)}"
+
+    return render_template('1_sport/result.html', plan=plan)
+
+
+# 🤖 机器人客服页面
+@app.route('/sport/chatbox', methods=["GET", "POST"])
+def chatbox():
+    return render_template('1_sport/chatbox.html')
+
+@app.route('/query', methods=["GET", 'POST'])
+def query_gemini():
+    user_question = request.form.get("question")
+    logger.debug(f"Received question: {user_question}")
+    
+    if not user_question:
+        return jsonify({"error": "Please provide a question"})
+
+    try:
+        prompt = f"""
+        Please provide a detailed answer to the question "{user_question}", including:
+        1. Action instructions and key points
+        2. Related image descriptions and search keywords
+        3. Notes and suggestions
+        """
+
+        response = model1.generate_content(prompt)
+        formatted_text = format_response(response.text)
+
+        image_keywords = re.findall(r'\*\*Search Keywords: (.*?)\*\*', response.text)
+
+        return jsonify({
+            "text": formatted_text,
+            "imageKeywords": image_keywords
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
+
+
+# 📌 格式化 AI 响应
+def format_response(text):
+    paragraphs = text.split("\n\n")
+    formatted_sections = []
+
+    for section in paragraphs:
+        if section.startswith("# "):  # 处理标题
+            section = f"<h2>{section.strip('# ')}</h2>"
+        elif section.startswith("* "):  # 处理列表
+            items = section.split("\n* ")
+            formatted_items = ['<li>' + item.strip('* ') + '</li>' for item in items if item]
+            section = '<ul>' + ''.join(formatted_items) + '</ul>'
+        else:
+            section = f"<p>{section}</p >"
+        
+        formatted_sections.append(section)
+
+    return ''.join(formatted_sections)
+
+
+
+# Function2: Diet ---------------------------------------------------------------------------
 
 def get_food_id(food_name):
     url = f"https://api.spoonacular.com/food/ingredients/search"
@@ -92,16 +194,16 @@ def get_recipe_details(recipe_id):
         return None
 
 
-@app.route("/", methods=["GET", "POST"])
+### Function2.1: Meal PLanning 
+@app.route("/diet", methods=["GET", "POST"])
 def diet():
-    return render_template("diet.html")
+    return render_template("2_diet/diet_index.html")
 
-
-@app.route("/meal", methods=["GET", "POST"])
+@app.route("/diet/meal", methods=["GET", "POST"])
 def meal():
-    return render_template("meal.html")
+    return render_template("2_diet/meal.html")
 
-@app.route("/meal_plan", methods=["POST"])
+@app.route("/diet/meal_plan", methods=["POST"])
 def meal_plan():
     goal = request.form.get("goal")  # 获取用户目标（增肌/减脂）
     preferences = request.form.get("preferences")  # 获取食材偏好
@@ -109,7 +211,7 @@ def meal_plan():
     # 构造提示词
     prompt = f"""
     My goal is: {goal}.
-    My ingredient preferences are：{preferences}.
+    My ingredient preferences are: {preferences}.
     Please generate a diet plan similar to Mint Health that contains:
     1. total calories (kcal) and nutrient ratios (protein, fat, carbohydrates).
     2. detailed recommendations for three meals (food + grams).
@@ -148,14 +250,14 @@ def meal_plan():
     except:
         meal_plan_text = "Unable to generate diet plan, please try again later."
 
-    return render_template("meal_plan.html", meal_plan=meal_plan_text)
+    return render_template("2_diet/meal_plan.html", meal_plan=meal_plan_text)
 
-
-@app.route("/food", methods=["GET", "POST"])
+### Function2.2: Food Search
+@app.route("/diet/food", methods=["GET", "POST"])
 def food():
-    return render_template("food.html")
+    return render_template("2_diet/food.html")
 
-@app.route("/food_result", methods=["GET", "POST"])
+@app.route("/diet/food_result", methods=["GET", "POST"])
 def food_result():
     food_name = request.form.get("q")
     food_id = get_food_id(food_name)
@@ -163,32 +265,175 @@ def food_result():
         nutrition_info = get_food_nutrition(food_id)
         print(f"{food_name} nutrition component (every 100g):")
         r = '\n'.join(f"{key}: {value}" for key, value in nutrition_info.items())
-        return render_template("food_result.html",r=r)
+        return render_template("2_diet/food_result.html",r=r)
     else:
         r = "There is no such food."
-        return render_template("food_result.html",r=r)
+        return render_template("2_diet/food_result.html",r=r)
     
-
-@app.route("/recipe", methods=["GET", "POST"])
+### Function2.3: Recipe Search
+@app.route("/diet/recipe", methods=["GET", "POST"])
 def recipe():
-    return render_template("recipe.html")
+    return render_template("2_diet/recipe.html")
 
-@app.route("/recipe_result", methods=["GET", "POST"])
+@app.route("/diet/recipe_result", methods=["GET", "POST"])
 def recipe_result():
     recipe_name = request.form.get("q")
     recipes = get_recipe_id(recipe_name) 
     if recipes:
-        return render_template("recipe_result.html", recipes=recipes)  
+        return render_template("2_diet/recipe_result.html", recipes=recipes)  
     else:
-        return render_template("recipe_result.html", recipes=[])  
+        return render_template("2_diet/recipe_result.html", recipes=[])  
 
-@app.route("/recipe_detail/<int:recipe_id>")
+@app.route("/diet/recipe_detail/<int:recipe_id>")
 def recipe_detail(recipe_id):
     recipe_info = get_recipe_details(recipe_id) 
     if recipe_info:
-        return render_template("recipe_detail.html", recipe=recipe_info)
+        return render_template("2_diet/recipe_detail.html", recipe=recipe_info)
     else:
         return "Recipe not found", 404
+
+
+
+# Function3: Health -------------------------------------------------------------------------
+# Initialize the SQLite database
+def init_db():
+    conn = sqlite3.connect("health.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS weight_history (
+            id INTEGER PRIMARY KEY, 
+            date TEXT, 
+            weight REAL
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS exercise_data (
+            id INTEGER PRIMARY KEY, 
+            date TEXT, 
+            heart_rate INTEGER, 
+            steps INTEGER, 
+            calories INTEGER
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS food_data (
+            id INTEGER PRIMARY KEY, 
+            date TEXT, 
+            food_list TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# Home - Health management main interface
+@app.route("/health", methods=["GET", "POST"])
+def health():
+    return render_template("3_health/index.html")
+
+# ========= Weight Update & BMI Calculation =========
+
+# Display the weight update form page
+@app.route("/health/update_weight_form", methods=["GET", "POST"])
+def update_weight_form():
+    return render_template("3_health/update_weight.html")
+
+# Handle weight update submission
+@app.route("/health/update_weight", methods=["GET", "POST"])
+def update_weight():
+    weight = request.form.get("weight")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conn = sqlite3.connect("health.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO weight_history (date, weight) VALUES (?, ?)", (date, weight))
+    conn.commit()
+    conn.close()
+
+    return render_template("3_health/dashboard.html", message="Weight data updated!")
+
+# ========= Sports data submission =========
+
+# Display the sports data form page
+@app.route("/health/submit_exercise_form", methods=["GET", "POST"])
+def submit_exercise_form():
+    return render_template("3_health/submit_exercise.html")
+
+# Processing motion data submission
+@app.route("/health/submit_exercise", methods=["GET", "POST"])
+def submit_exercise():
+    heart_rate = request.form.get("heart_rate")
+    steps = request.form.get("steps")
+    calories = request.form.get("calories")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conn = sqlite3.connect("health.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO exercise_data (date, heart_rate, steps, calories) VALUES (?, ?, ?, ?)", 
+                   (date, heart_rate, steps, calories))
+    conn.commit()
+    conn.close()
+
+    return render_template("3_health/dashboard.html", message="Sports data recorded!")
+
+# ========= Diet data submission =========
+
+# Display the diet data form page
+@app.route("/health/submit_food_form", methods=["GET", "POST"])
+def submit_food_form():
+    return render_template("3_health/submit_food.html")
+
+# Process dietary data submission & call genAI to calculate calories
+@app.route("/health/submit_food", methods=["GET", "POST"])
+def submit_food():
+    food_list = request.form.get("food_list")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Save to database
+    conn = sqlite3.connect("health.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO food_data (date, food_list) VALUES (?, ?)", (date, food_list))
+    conn.commit()
+    conn.close()
+
+    # Call Gemini to calculate 
+    prompt = f"Calculate the total calories and nutritional ratio (carbohydrate/protein/fat) of the following foods: {food_list}"
+    
+    response = model.generate_content(prompt)
+    
+    nutrition_result = response.text if response and response.text else "Unable to obtain nutritional analysis results"
+
+    return render_template("3_health/dashboard.html", message="Diet data recorded!", nutrition_analysis=nutrition_result)
+
+# ========= Generate health report ==========
+
+@app.route("/health/generate_report", methods=["GET", "POST"])
+def generate_report():
+    conn = sqlite3.connect("health.db")
+    cursor = conn.cursor()
+
+    # Get the weight data for the last 7 days
+    cursor.execute("SELECT date, weight FROM weight_history ORDER BY date DESC LIMIT 7")
+    weight_history = cursor.fetchall()
+
+    # Get the last 7 days of exercise data
+    cursor.execute("SELECT date, heart_rate, steps, calories FROM exercise_data ORDER BY date DESC LIMIT 7")
+    exercise_data = cursor.fetchall()
+
+    conn.close()
+
+    # Generate AI health recommendations (based on historical data)
+    prompt = f"User's weight change in the last 7 days: {weight_history}, Sports data: {exercise_data}. Please provide an overall health analysis, including weight trends, exercise recommendations, and dietary modification plans."
+    response = model.generate_content(prompt)
+    
+    health_advice = response.text if response and response.text else "Unable to obtain nutritional analysis results"
+
+    return render_template("3_health/health_report.html", 
+                           weight_history=weight_history, 
+                           exercise_data=exercise_data,
+                           health_advice=health_advice)
+    
 
 
 
@@ -196,3 +441,5 @@ def recipe_detail(recipe_id):
 
 if __name__ == "__main__":
     app.run(debug=True)     
+
+

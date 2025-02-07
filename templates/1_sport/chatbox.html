@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Service Robot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #34495e;
+        }
+
+        #query-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #dde1e7;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .response-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        #text-response {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        #text-response h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 15px;
+        }
+
+        #text-response h3 {
+            color: #34495e;
+            margin-top: 10px;
+        }
+
+        #text-response strong {
+            color: #2980b9;
+        }
+
+        #text-response ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        #text-response li {
+            margin-bottom: 5px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🤖 Customer Service Robot</h1>
+
+    <form id="query-form">
+        <input type="text" id="query" placeholder="Enter your question here..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="response-container" id="response-box" style="display: none;">
+        <h2>Response</h2>
+        <div id="text-response"></div>
+    </div>
+
+    <!-- 🔙 返回主页 -->
+    <div class="button-container">
+        <button onclick="location.href='/sport'">Return to Home</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("query-form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
+        let query = document.getElementById("query").value;
+        let responseBox = document.getElementById("response-box");
+        let textResponse = document.getElementById("text-response");
+
+        textResponse.innerHTML = "Loading...";
+        responseBox.style.display = "block";
+
+        try {
+            let response = await fetch("/query", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ question: query })
+            });
+
+            let data = await response.json();
+            textResponse.innerHTML = data.text || "No response received.";
+        } catch (error) {
+            textResponse.innerHTML = "Error retrieving response. Please try again.";
+        }
+    });
+</script>
+
+</body>
+</html>
