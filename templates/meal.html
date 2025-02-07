@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Diet Plan</title>
+</head>
+<body>
+    <h1>Please enter some information</h1>
+    <form action="/meal_plan" method="POST">
+        <label for="goal">Goal：</label>
+        <select name="goal" required>
+            <option value="Muscle-Building">Muscle-Building</option>
+            <option value="Fat-Loss">Fat-Loss</option>
+        </select>
+        <br><br>
+        
+        <label for="preferences">Diet Preferences：</label>
+        <input type="text" name="preferences" placeholder="e.g. Chicken Breast, Avocado">
+        <br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
