@@ -14,6 +14,7 @@ model = genai.GenerativeModel("gemini-1.5-flash")
 model1 = genai.GenerativeModel("gemini-pro")
 
 api_key = '12221dd003c94483a56acc23fa8bcd16'   # spoonacular.com Food API 
+pic_api_key = "cRrwsrbQBOv4D1kJIIjnfty8Ecqh7Cq4H3lD2HKyOT3ZD1n0bxMwS1w6" # pic API pexels
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
