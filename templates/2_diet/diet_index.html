@@ -1,23 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    <title>Diet Helper</title>
+    <style>
+        /* 通用样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        /* 背景与布局 */
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        /* 容器样式 */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        /* 标题样式 */
+        h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* 按钮样式 */
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 按钮悬停效果 */
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
 <body>
-    <div class="container">
-        <h2>Diet Helper</h2>
+
+<div class="container">
+    <h2>🍎AI Diet Assignment</h2>
+    <div class="button-group">
         <form action="/diet/meal" method="post">
-            <p><input type="submit" value="Meal Planning"></p>
+            <input type="submit" value="🍽️ Meal Planning">
         </form>
         <form action="/diet/food" method="post">
-            <p><input type="submit" value="Food Search"></p>
+            <input type="submit" value="🥗 Food Search">
         </form>
         <form action="/diet/recipe" method="post">
-            <p><input type="submit" value="Recipe Search"></p>
-        </form>
-        <form action="/diet" method="post">
-            <p><input type="submit" value="End"></p>
+            <input type="submit" value="📖 Recipe Search">
         </form>
     </div>
+</div>
+
 </body>
+</html>
 

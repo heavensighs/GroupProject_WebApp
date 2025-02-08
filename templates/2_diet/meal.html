@@ -4,22 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Diet Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaf6ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #34495e;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 18px;
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        label {
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .return-link {
+            display: block;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .return-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Please enter some information</h1>
-    <form action="/diet/meal_plan" method="POST">
-        <label for="goal">Goal：</label>
-        <select name="goal" required>
-            <option value="Muscle-Building">Muscle-Building</option>
-            <option value="Fat-Loss">Fat-Loss</option>
-        </select>
-        <br><br>
-        
-        <label for="preferences">Diet Preferences：</label>
-        <input type="text" name="preferences" placeholder="e.g. Chicken Breast, Avocado">
-        <br><br>
+    <div class="container">
+        <h1>🍽️ Meal Planning</h1>
+        <h4>Please enter the information: </h4>
+        <form action="/diet/meal_plan" method="POST">
+            <label for="goal">Goal:</label>
+            <select name="goal" required>
+                <option value="Muscle-Building">Muscle-Building</option>
+                <option value="Fat-Loss">Fat-Loss</option>
+            </select>
+            <br><br>
+            
+            <label for="preferences">Diet Preferences:</label>
+            <input type="text" name="preferences" placeholder="e.g. Chicken Breast, Avocado">
+            <br><br>
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
 </body>
 </html>

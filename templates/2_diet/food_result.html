@@ -1,12 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    <title>Food Search Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaf6ff;
+            padding: 20px;
+        }
 
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            color: #34495e;
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: "Segoe UI", monospace;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
 <body>
-    <div class="container">
-        <h2>Reply</h2>
-        <h4><pre>{{ r }}</pre></h4>
-        <a href="/">Main</a>
-    </div>
+
+<div class="container">
+    <h2>Nutrition information for every 100g:</h2>
+ 
+    <h4><pre>{{ r }}</pre></h4>
+
+    <a href="/">Return to Home</a>
+</div>
+
 </body>
+</html>

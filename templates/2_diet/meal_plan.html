@@ -4,10 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Diet Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaf6ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #34495e;
+            text-align: center;
+        }
+
+        .meal-plan {
+            line-height: 1.8;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .return-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Personal Diet Plan</h1>
-    <p>{{ meal_plan }}</p>
-    <a href="/">Main</a>
+    <div class="container">
+        <h1>🍽️ Meal Plan</h1>
+        <h2>Generated Meal Plan</h2>
+        <div class="meal-plan">
+            <!-- 渲染 meal_plan -->
+            <p>{{ meal_plan | safe }}</p>
+        </div>
+
+        <a href="/" class="return-btn">Return to Home</a>
+    </div>
 </body>
 </html>

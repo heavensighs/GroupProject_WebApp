@@ -130,6 +130,7 @@ def get_food_id(food_name):
 def get_food_nutrition(food_id):
     url = f"https://api.spoonacular.com/food/ingredients/{food_id}/information"
     params = {
+        "unit": "g",
         "amount": 100,  # 100g 
         "apiKey": api_key
     }
@@ -147,7 +148,7 @@ def get_food_nutrition(food_id):
     else:
         return None
 
-def get_recipe_id(query, number=5):
+def get_recipe_id(query, number=10):
     url = "https://api.spoonacular.com/recipes/complexSearch"
     params = {
         "query": query,  # search by key word
@@ -193,6 +194,29 @@ def get_recipe_details(recipe_id):
     else:
         return None
 
+def format_recipe_details(recipe_details):
+    """格式化食谱详情为可读文本"""
+    if not recipe_details:
+        return "Recipe not found"
+    
+    formatted_text = f"\n🍽️ {recipe_details['title']} 🍽️\n"
+    formatted_text += f"📷 Picture: {recipe_details['image']}\n\n"
+    
+    formatted_text += "🥕 Ingredients:\n"
+    for ing in recipe_details["ingredients"]:
+        formatted_text += f"- {ing}\n"
+
+    formatted_text += "\n📜 Instructions:\n"
+    formatted_text += f"{recipe_details['instructions']}\n"
+
+    formatted_text += "\n🔢 Nutrition:\n"
+    formatted_text += "Nutrition for every 100g:\n"
+    for key, value in recipe_details["nutrition"].items():
+        formatted_text += f"- {key}: {value}\n"
+
+    return formatted_text
+
+
 
 ### Function2.1: Meal PLanning 
 @app.route("/diet", methods=["GET", "POST"])
@@ -218,7 +242,7 @@ def meal_plan():
     3. an option to change foods.
 
     The format is as follows:
-    ``
+    ```
     Total calories: 2200 kcal
     Nutritional ratio: Protein 30% (165g), Fat 20% (49g), Carbohydrate 50% (275g).
 
@@ -236,10 +260,9 @@ def meal_plan():
     - Sweet Potato 200g
     - Salmon 120g
     - Avocado 50g
-    、、
+    ```
     Please follow the format output strictly! And A few lines between each meal. And it should be daily plan with 7 days a week.
     """
-
 
     # 让 Gemini AI 生成饮食计划
     response = model.generate_content(prompt)
@@ -250,7 +273,25 @@ def meal_plan():
     except:
         meal_plan_text = "Unable to generate diet plan, please try again later."
 
-    return render_template("2_diet/meal_plan.html", meal_plan=meal_plan_text)
+    # 处理 Markdown 加粗
+    meal_plan_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", meal_plan_text)
+
+    # 去除多余的空行
+    meal_plan_text = re.sub(r"\n\s*\n", "\n", meal_plan_text)
+
+    # 将换行符替换为 <br> 标签
+    formatted_meal_plan = meal_plan_text.replace("\n", "<br>")
+
+    # 将 meal_plan_text 格式化以添加合适的空行
+    formatted_meal_plan = formatted_meal_plan.replace("<br><br>", "<br>")  # 去除多余的空行
+    formatted_meal_plan = formatted_meal_plan.replace("Option to change foods:", "<br><br>Option to change foods:")  # 增加空行
+    formatted_meal_plan = formatted_meal_plan.replace("Important Considerations:", "<br><br>Important Considerations:")  # 增加空行
+
+    return render_template("2_diet/meal_plan.html", meal_plan=formatted_meal_plan)
+
+
+
+
 
 ### Function2.2: Food Search
 @app.route("/diet/food", methods=["GET", "POST"])
@@ -286,11 +327,13 @@ def recipe_result():
 
 @app.route("/diet/recipe_detail/<int:recipe_id>")
 def recipe_detail(recipe_id):
-    recipe_info = get_recipe_details(recipe_id) 
+    recipe_info = get_recipe_details(recipe_id)
     if recipe_info:
-        return render_template("2_diet/recipe_detail.html", recipe=recipe_info)
+        formatted_recipe = format_recipe_details(recipe_info)
+        return render_template("2_diet/recipe_detail.html", recipe=recipe_info, formatted_recipe=formatted_recipe)
     else:
         return "Recipe not found", 404
+
 
 
 
@@ -440,6 +483,6 @@ def generate_report():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)     
+    app.run(debug=True, port=5001)     
 
 

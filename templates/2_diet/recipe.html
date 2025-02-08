@@ -1,15 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Recipe Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaf6ff; /* 淡蓝色背景 */
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #34495e;
+        }
+
+        p {
+            color: #2c3e50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid #dde1e7;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>Recipe Search</h2>
-        <p>Please enter the recipe name : </p>
+        <h2>📖 Recipe Search</h2>
+        <p>Please enter the recipe name:</p>
         <form action="/diet/recipe_result" method="post">
-            <p><input type="text" name="q"></p>
-            <p><input type="submit" value="Enter"></p>
+            <input type="text" name="q" placeholder="Type a recipe name..." required>
+            <input type="submit" value="Search">
         </form>
     </div>
 </body>
+</html>

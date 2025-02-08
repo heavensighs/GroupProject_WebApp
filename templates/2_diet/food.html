@@ -1,15 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    <title>Food Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
 
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #34495e;
+        }
+
+        #food-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #dde1e7;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .response-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            display: none;
+        }
+
+        #food-response {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        #food-response h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 15px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
 <body>
-    <div class="container">
-        <h2>Food Search</h2>
-        <p>Please enter the food name : </p>
-        <form action="/diet/food_result" method="post">
-            <p><input type="text" name="q"></p>
-            <p><input type="submit" value="Enter"></p>
-        </form>
+
+<div class="container">
+    <h1>🥗 Food Search</h1>
+    <p>Please enter the food name:</p>
+
+    <form id="food-form" action="/diet/food_result" method="post">
+        <input type="text" name="q" id="food-query" placeholder="Enter food name..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="response-container" id="response-box">
+        <h2>Search Result</h2>
+        <div id="food-response">Your search results will appear here.</div>
     </div>
+
+  
+
+<script>
+    document.getElementById("food-form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
+        let query = document.getElementById("food-query").value;
+        let responseBox = document.getElementById("response-box");
+        let foodResponse = document.getElementById("food-response");
+
+        foodResponse.innerHTML = "Searching...";
+        responseBox.style.display = "block";
+
+        try {
+            let response = await fetch("/diet/food_result", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ q: query })
+            });
+
+            let data = await response.text();
+            foodResponse.innerHTML = data || "No results found.";
+        } catch (error) {
+            foodResponse.innerHTML = "Error retrieving results. Please try again.";
+        }
+    });
+</script>
+
 </body>
+</html>
