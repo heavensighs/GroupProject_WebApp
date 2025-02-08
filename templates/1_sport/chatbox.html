@@ -85,7 +85,7 @@
 <div class="container">
     <h1>🤖 Customer Service Robot</h1>
 
-    <!-- 客服查询 -->
+    <!-- Customer Service Query -->
     <form id="query-form">
         <input type="text" id="query" placeholder="Enter your question here..." required>
         <button type="submit">Search</button>
@@ -96,7 +96,7 @@
         <div id="text-response"></div>
     </div>
 
-    <!-- 新增：健身标准动作查询 -->
+    <!-- New: Fitness Standard Movements Query -->
     <h2>🏋️ Fitness standard movements query</h2>
     <form id="exercise-form">
         <input type="text" id="exercise-query" placeholder="Enter exercise name..." required>
@@ -104,14 +104,14 @@
     </form>
     <div id="exercise-result" style="margin-top: 20px;"></div>
 
-    <!-- 返回主页按钮 -->
+    <!-- Return to Home Page Button -->
     <div class="button-container">
         <button onclick="location.href='/sport'">Return to 🏋️ AI Workout Plan Menu</button>
     </div>
 </div>
 
 <script>
-    // 客服查询处理
+    // Customer Service Query Handler
     document.getElementById("query-form").addEventListener("submit", async function(event) {
         event.preventDefault();
         
@@ -136,7 +136,7 @@
         }
     });
 
-    // 健身标准动作查询处理
+    // Fitness Standard Movements Query Handler
     document.getElementById("exercise-form").addEventListener("submit", async function(event) {
         event.preventDefault();
         
@@ -145,7 +145,7 @@
         exerciseResult.innerHTML = "Loading...";
 
         try {
-            // 调用后端新增的接口 /exercise_image
+            // Call the new backend API /exercise_image
             let response = await fetch(`/exercise_image?query=${encodeURIComponent(exerciseQuery)}`);
             let data = await response.json();
             if (data.imageUrl) {
