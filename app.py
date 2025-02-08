@@ -34,7 +34,7 @@ def index():
 
 # Funtion1: Sport ---------------------------------------------------------------------------
 
-# 🎯 运动计划页面
+# 🎯 Workout Plan Page
 @app.route('/sport', methods=["GET", "POST"])
 def home():
     return render_template('1_sport/index.html')
@@ -60,7 +60,7 @@ def generate_plan():
     return render_template('1_sport/result.html', plan=plan)
 
 
-# 🤖 机器人客服页面
+# 🤖 Chatbot / Customer Service Page
 @app.route('/sport/chatbox', methods=["GET", "POST"])
 def chatbox():
     return render_template('1_sport/chatbox.html')
@@ -96,29 +96,29 @@ def query_gemini():
 
 @app.route('/exercise_image', methods=['GET'])
 def exercise_image():
-    # 从请求参数中获取健身动作名称
+    # Get the exercise name from the request parameters
     query = request.args.get('query')
     if not query:
         return jsonify({'error': 'Missing exercise query parameter'}), 400
 
-    # 构造 Pexels API 的请求参数
+    # Construct the Pexels API request parameters
     url = 'https://api.pexels.com/v1/search'
     params = {
         'query': query,
-        'per_page': 1  # 返回1个结果，你可以根据需求修改返回数量
+        'per_page': 1  # Return 1 result; you can modify this number as needed
     }
     headers = {
-        'Authorization': pic_api_key  # 使用你提供的 Pexels API key
+        'Authorization': pic_api_key  # Use the provided Pexels API key
     }
 
     try:
         response = requests.get(url, params=params, headers=headers)
-        response.raise_for_status()  # 如果响应状态码不是200，将引发异常
+        response.raise_for_status()  # Raise an exception if the response status code is not 200
         data = response.json()
 
         if data.get('photos') and len(data['photos']) > 0:
             photo = data['photos'][0]
-            # 返回图片的中等尺寸链接
+            # Return the medium-sized image URL
             return jsonify({
                 'imageUrl': photo['src']['medium'],
                 'photographer': photo.get('photographer', '')
@@ -130,15 +130,15 @@ def exercise_image():
 
 
 
-# 📌 格式化 AI 响应
+# 📌 Format AI Response
 def format_response(text):
     paragraphs = text.split("\n\n")
     formatted_sections = []
 
     for section in paragraphs:
-        if section.startswith("# "):  # 处理标题
+        if section.startswith("# "):  # Process headings
             section = f"<h2>{section.strip('# ')}</h2>"
-        elif section.startswith("* "):  # 处理列表
+        elif section.startswith("* "):  # Process lists
             items = section.split("\n* ")
             formatted_items = ['<li>' + item.strip('* ') + '</li>' for item in items if item]
             section = '<ul>' + ''.join(formatted_items) + '</ul>'
