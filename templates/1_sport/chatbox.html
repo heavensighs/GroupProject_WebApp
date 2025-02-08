@@ -1,164 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Service Robot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
-            padding: 20px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Service Robot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      padding: 20px;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        h1, h2 {
-            text-align: center;
-            color: #34495e;
-        }
+    h1, h2 {
+      text-align: center;
+      color: #34495e;
+    }
 
-        #query-form, #exercise-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    /* Existing form styles */
+    #query-form, #exercise-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #dde1e7;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #dde1e7;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #3498db;
-        }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #3498db;
+    }
 
-        button {
-            padding: 12px 20px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
+    button {
+      padding: 12px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #2980b9;
-        }
+    button:hover {
+      background-color: #2980b9;
+    }
 
-        .response-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
+    .response-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
 
-        #text-response {
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 10px;
-        }
+    #text-response {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
 
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* New CSS for AI response formatting */
+    .ai-heading {
+      font-size: 24px;
+      margin: 20px 0 10px;
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 5px;
+    }
+
+    .ai-paragraph {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .ai-list {
+      list-style-type: disc;
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .ai-list li {
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
+  <div class="container">
     <h1>🤖 Customer Service Robot</h1>
 
     <!-- Customer Service Query -->
     <form id="query-form">
-        <input type="text" id="query" placeholder="Enter your question here..." required>
-        <button type="submit">Search</button>
+      <input type="text" id="query" placeholder="Enter your question here..." required />
+      <button type="submit">Search</button>
     </form>
 
     <div class="response-container" id="response-box" style="display: none;">
-        <h2>Answer</h2>
-        <div id="text-response"></div>
+      <h2>Answer</h2>
+      <div id="text-response"></div>
     </div>
 
     <!-- New: Fitness Standard Movements Query -->
     <h2>🏋️ Fitness Standard Movements Query</h2>
     <form id="exercise-form">
-        <input type="text" id="exercise-query" placeholder="Enter exercise name..." required>
-        <button type="submit">Search Image</button>
+      <input type="text" id="exercise-query" placeholder="Enter exercise name..." required />
+      <button type="submit">Search Image</button>
     </form>
     <div id="exercise-result" style="margin-top: 20px;"></div>
 
     <!-- Return to Home Page Button -->
     <div class="button-container">
-        <button onclick="location.href='/sport'">Return to AI Workout Plan Menu</button>
+      <button onclick="location.href='/sport'">Return to AI Workout Plan Menu</button>
     </div>
-</div>
+  </div>
 
-<script>
+  <script>
     // Customer Service Query Handler
     document.getElementById("query-form").addEventListener("submit", async function(event) {
-        event.preventDefault();
-        
-        let query = document.getElementById("query").value;
-        let responseBox = document.getElementById("response-box");
-        let textResponse = document.getElementById("text-response");
+      event.preventDefault();
 
-        textResponse.innerHTML = "Loading...";
-        responseBox.style.display = "block";
+      let query = document.getElementById("query").value;
+      let responseBox = document.getElementById("response-box");
+      let textResponse = document.getElementById("text-response");
 
-        try {
-            let response = await fetch("/query", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ question: query })
-            });
+      textResponse.innerHTML = "Loading...";
+      responseBox.style.display = "block";
 
-            let data = await response.json();
-            textResponse.innerHTML = data.text || "No response received.";
-        } catch (error) {
-            textResponse.innerHTML = "Error retrieving response. Please try again.";
-        }
+      try {
+        let response = await fetch("/query", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ question: query })
+        });
+
+        let data = await response.json();
+        textResponse.innerHTML = data.text || "No response received.";
+      } catch (error) {
+        textResponse.innerHTML = "Error retrieving response. Please try again.";
+      }
     });
 
     // Fitness Standard Movements Query Handler
     document.getElementById("exercise-form").addEventListener("submit", async function(event) {
-        event.preventDefault();
-        
-        let exerciseQuery = document.getElementById("exercise-query").value;
-        let exerciseResult = document.getElementById("exercise-result");
-        exerciseResult.innerHTML = "Loading...";
+      event.preventDefault();
 
-        try {
-            // Call the new backend API /exercise_image
-            let response = await fetch(`/exercise_image?query=${encodeURIComponent(exerciseQuery)}`);
-            let data = await response.json();
-            if (data.imageUrl) {
-                exerciseResult.innerHTML = `<h3>${exerciseQuery} Image:</h3>
-                                            <img src="${data.imageUrl}" alt="${exerciseQuery}" style="max-width:100%; border-radius:10px;">`;
-            } else {
-                exerciseResult.innerHTML = "No image found for the given exercise.";
-            }
-        } catch (error) {
-            exerciseResult.innerHTML = "Error fetching image. Please try again.";
+      let exerciseQuery = document.getElementById("exercise-query").value;
+      let exerciseResult = document.getElementById("exercise-result");
+      exerciseResult.innerHTML = "Loading...";
+
+      try {
+        // Call the new backend API /exercise_image
+        let response = await fetch(`/exercise_image?query=${encodeURIComponent(exerciseQuery)}`);
+        let data = await response.json();
+        if (data.imageUrl) {
+          exerciseResult.innerHTML = `<h3>${exerciseQuery} Image:</h3>
+                                      <img src="${data.imageUrl}" alt="${exerciseQuery}" style="max-width:100%; border-radius:10px;">`;
+        } else {
+          exerciseResult.innerHTML = "No image found for the given exercise.";
         }
+      } catch (error) {
+        exerciseResult.innerHTML = "Error fetching image. Please try again.";
+      }
     });
-</script>
-
+  </script>
 </body>
 </html>
