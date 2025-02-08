@@ -34,7 +34,7 @@ def index():
 
 # Funtion1: Sport ---------------------------------------------------------------------------
 
-# 🎯 Workout Plan Page
+# Workout Plan Page
 @app.route('/sport', methods=["GET", "POST"])
 def home():
     return render_template('1_sport/index.html')
@@ -60,7 +60,7 @@ def generate_plan():
     return render_template('1_sport/result.html', plan=plan)
 
 
-# 🤖 Chatbot / Customer Service Page
+# Customer Service Page
 @app.route('/sport/chatbox', methods=["GET", "POST"])
 def chatbox():
     return render_template('1_sport/chatbox.html')
@@ -130,7 +130,7 @@ def exercise_image():
 
 
 
-# 📌 Format AI Response
+# Format AI Response
 def format_response(text):
     paragraphs = text.split("\n\n")
     formatted_sections = []
