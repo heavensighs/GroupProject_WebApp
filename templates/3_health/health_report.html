@@ -1,78 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Report</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        h2 {
-            color: #555;
-            margin-bottom: 15px;
-        }
-        canvas {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-        }
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Health Report</h1>
-        <h2>Your Health Metrics</h2>
-        <canvas id="healthChart"></canvas>
-        <a href="/health" class="btn">Back to 🏥 Health Management System</a>
+    <h1>Health Report</h1>
+
+    <h2>Recent Weight Changes</h2>
+    <div style="width: 600px; height: 300px; margin: auto;">
+        <canvas id="weightChart"></canvas>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <h2>Exercise Data (Calories Burned)</h2>
+    <div style="width: 600px; height: 300px; margin: auto;">
+        <canvas id="caloriesChart"></canvas>
+    </div>
+
+    <h2>Health Advice</h2>
+    <ul>
+        {% for line in health_advice.split("\n") %}
+            {% if line.strip() %}
+                <li>{{ line.strip() }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
+    <a href="/health" class="back-button">Back to 🏥 Health Management System</a>
+
     <script>
-        var ctx = document.getElementById('healthChart').getContext('2d');
-        var healthChart = new Chart(ctx, {
+        // Retrieve data from Flask
+        const weightData = {{ weight_history | tojson }};
+        const exerciseData = {{ exercise_data | tojson }};
+
+        // Process weight data
+        const weightLabels = weightData.map(item => item[0]);  // Dates
+        const weightValues = weightData.map(item => item[1]);  // Weight values
+
+        // Process calorie data
+        const exerciseLabels = exerciseData.map(item => item[0]);  // Dates
+        const calorieValues = exerciseData.map(item => item[3]);   // Calories burned
+
+        // Line chart for weight
+        const weightCtx = document.getElementById('weightChart').getContext('2d');
+        new Chart(weightCtx, {
+            type: 'line',
+            data: {
+                labels: weightLabels,
+                datasets: [{
+                    label: 'Weight (kg)',
+                    data: weightValues,
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+
+        // Bar chart for calories burned
+        const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
+        new Chart(caloriesCtx, {
             type: 'bar',
             data: {
-                labels: {{ labels|tojson }},
+                labels: exerciseLabels,
                 datasets: [{
-                    label: 'Health Metrics',
-                    data: {{ values|tojson }},
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    label: 'Calories Burned (kcal)',
+                    data: calorieValues,
+                    backgroundColor: 'orange',
                     borderWidth: 1
                 }]
             },
@@ -80,12 +81,9 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });
     </script>
 </body>
-</html>
