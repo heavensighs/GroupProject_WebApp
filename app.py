@@ -130,24 +130,29 @@ def exercise_image():
 
 
 
-# Format AI Response
+# AI Response Format
 def format_response(text):
     paragraphs = text.split("\n\n")
     formatted_sections = []
 
     for section in paragraphs:
-        if section.startswith("# "):  # Process headings
-            section = f"<h2>{section.strip('# ')}</h2>"
-        elif section.startswith("* "):  # Process lists
+        # Process headings
+        if section.startswith("# "):
+            # Remove the '#' symbol and extra spaces, then add a CSS class for styling
+            section = f'<h2 class="ai-heading">{section.lstrip("# ").strip()}</h2>'
+        # Process lists
+        elif section.startswith("* "):
             items = section.split("\n* ")
-            formatted_items = ['<li>' + item.strip('* ') + '</li>' for item in items if item]
-            section = '<ul>' + ''.join(formatted_items) + '</ul>'
+            formatted_items = [f'<li>{item.lstrip("* ").strip()}</li>' for item in items if item.strip()]
+            section = f'<ul class="ai-list">{"".join(formatted_items)}</ul>'
+        # Process normal paragraphs
         else:
-            section = f"<p>{section}</p >"
+            section = f'<p class="ai-paragraph">{section.strip()}</p>'
         
         formatted_sections.append(section)
 
-    return ''.join(formatted_sections)
+    # Join the sections with newlines for better HTML readability
+    return "\n".join(formatted_sections)
 
 
 
