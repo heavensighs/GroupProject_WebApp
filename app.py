@@ -94,6 +94,40 @@ def query_gemini():
     except Exception as e:
         return jsonify({"error": str(e)})
 
+@app.route('/exercise_image', methods=['GET'])
+def exercise_image():
+    # 从请求参数中获取健身动作名称
+    query = request.args.get('query')
+    if not query:
+        return jsonify({'error': 'Missing exercise query parameter'}), 400
+
+    # 构造 Pexels API 的请求参数
+    url = 'https://api.pexels.com/v1/search'
+    params = {
+        'query': query,
+        'per_page': 1  # 返回1个结果，你可以根据需求修改返回数量
+    }
+    headers = {
+        'Authorization': pic_api_key  # 使用你提供的 Pexels API key
+    }
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()  # 如果响应状态码不是200，将引发异常
+        data = response.json()
+
+        if data.get('photos') and len(data['photos']) > 0:
+            photo = data['photos'][0]
+            # 返回图片的中等尺寸链接
+            return jsonify({
+                'imageUrl': photo['src']['medium'],
+                'photographer': photo.get('photographer', '')
+            })
+        else:
+            return jsonify({'error': 'No image found for the given query'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 # 📌 格式化 AI 响应
