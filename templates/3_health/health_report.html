@@ -1,47 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Report</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #34495e;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        ul {
+            padding: 0 20px;
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Health Report</h1>
+    <div class="container">
+        <h1>🏥 Health Report</h1>
 
-    <h2>Recent Weight Changes</h2>
-    <div style="width: 600px; height: 300px; margin: auto;">
-        <canvas id="weightChart"></canvas>
+        <h2>📉 Recent Weight Changes</h2>
+        <div class="chart-container">
+            <canvas id="weightChart"></canvas>
+        </div>
+
+        <h2>🔥 Exercise Data (Calories Burned)</h2>
+        <div class="chart-container">
+            <canvas id="caloriesChart"></canvas>
+        </div>
+
+        <h2>💡 Health Advice</h2>
+        <ul>
+            {% for line in health_advice.split("\n") %}
+                {% if line.strip() %}
+                    <li>{{ line.strip() }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        <a href="/health" class="back-button">Return to Health Management System</a>
     </div>
-
-    <h2>Exercise Data (Calories Burned)</h2>
-    <div style="width: 600px; height: 300px; margin: auto;">
-        <canvas id="caloriesChart"></canvas>
-    </div>
-
-    <h2>Health Advice</h2>
-    <ul>
-        {% for line in health_advice.split("\n") %}
-            {% if line.strip() %}
-                <li>{{ line.strip() }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    
-    <a href="/health" class="back-button">Back to 🏥 Health Management System</a>
 
     <script>
-        // Retrieve data from Flask
         const weightData = {{ weight_history | tojson }};
         const exerciseData = {{ exercise_data | tojson }};
 
-        // Process weight data
-        const weightLabels = weightData.map(item => item[0]);  // Dates
-        const weightValues = weightData.map(item => item[1]);  // Weight values
+        const weightLabels = weightData.map(item => item[0]);
+        const weightValues = weightData.map(item => item[1]);
 
-        // Process calorie data
-        const exerciseLabels = exerciseData.map(item => item[0]);  // Dates
-        const calorieValues = exerciseData.map(item => item[3]);   // Calories burned
+        const exerciseLabels = exerciseData.map(item => item[0]);
+        const calorieValues = exerciseData.map(item => item[3]);
 
-        // Line chart for weight
         const weightCtx = document.getElementById('weightChart').getContext('2d');
         new Chart(weightCtx, {
             type: 'line',
@@ -50,7 +92,7 @@
                 datasets: [{
                     label: 'Weight (kg)',
                     data: weightValues,
-                    borderColor: 'blue',
+                    borderColor: '#3498db',
                     borderWidth: 2,
                     fill: false
                 }]
@@ -64,7 +106,6 @@
             }
         });
 
-        // Bar chart for calories burned
         const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
         new Chart(caloriesCtx, {
             type: 'bar',
@@ -73,7 +114,7 @@
                 datasets: [{
                     label: 'Calories Burned (kcal)',
                     data: calorieValues,
-                    backgroundColor: 'orange',
+                    backgroundColor: '#e67e22',
                     borderWidth: 1
                 }]
             },
@@ -87,3 +128,4 @@
         });
     </script>
 </body>
+</html>

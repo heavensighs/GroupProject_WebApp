@@ -463,34 +463,6 @@ def submit_exercise():
 
     return render_template("3_health/dashboard.html", message="Sports data recorded!")
 
-# ========= Diet data submission =========
-
-# Display the diet data form page
-@app.route("/health/submit_food_form", methods=["GET", "POST"])
-def submit_food_form():
-    return render_template("3_health/submit_food.html")
-
-# Process dietary data submission & call genAI to calculate calories
-@app.route("/health/submit_food", methods=["GET", "POST"])
-def submit_food():
-    food_list = request.form.get("food_list")
-    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    # Save to database
-    conn = sqlite3.connect("health.db")
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO food_data (date, food_list) VALUES (?, ?)", (date, food_list))
-    conn.commit()
-    conn.close()
-
-    # Call Gemini to calculate 
-    prompt = f"Calculate the total calories and nutritional ratio (carbohydrate/protein/fat) of the following foods: {food_list}"
-    
-    response = model.generate_content(prompt)
-    
-    nutrition_result = response.text if response and response.text else "Unable to obtain nutritional analysis results"
-
-    return render_template("3_health/dashboard.html", message="Diet data recorded!", nutrition_analysis=nutrition_result)
 
 # ========= Generate health report ==========
 
