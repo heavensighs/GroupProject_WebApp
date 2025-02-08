@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diet Helper</title>
     <style>
-        /* 通用样式 */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -13,7 +12,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* 背景与布局 */
         body {
             background-color: #f5f7fa;
             display: flex;
@@ -23,7 +21,6 @@
             text-align: center;
         }
 
-        /* 容器样式 */
         .container {
             background: white;
             padding: 40px;
@@ -33,22 +30,19 @@
             width: 90%;
         }
 
-        /* 标题样式 */
-        h2 {
+        h1 {
             color: #34495e;
             font-size: 2em;
             margin-bottom: 20px;
         }
 
-        /* 按钮组 */
         .button-group {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        /* 按钮样式 */
-        input[type="submit"] {
+        button {
             background-color: #3498db;
             color: white;
             border: none;
@@ -60,8 +54,7 @@
             transition: background-color 0.3s ease;
         }
 
-        /* 按钮悬停效果 */
-        input[type="submit"]:hover {
+        button:hover {
             background-color: #2980b9;
         }
     </style>
@@ -71,18 +64,14 @@
 <div class="container">
     <h2>🍎AI Diet Assignment</h2>
     <div class="button-group">
-        <form action="/diet/meal" method="post">
-            <input type="submit" value="🍽️ Meal Planning">
-        </form>
-        <form action="/diet/food" method="post">
-            <input type="submit" value="🥗 Food Search">
-        </form>
-        <form action="/diet/recipe" method="post">
-            <input type="submit" value="📖 Recipe Search">
+        <button onclick="location.href='/diet/meal'">🍽️ Meal Planning</button>
+        <button onclick="location.href='/diet/food'">🥗 Food Search</button>
+        <button onclick="location.href='/diet/recipe'">📖 Recipe Search</button>
+        <form action="/index" method="post">
+            <p><input type="submit" value="🔙 Back to Main Menu" class="back-button"></p>
         </form>
     </div>
 </div>
 
 </body>
 </html>
-

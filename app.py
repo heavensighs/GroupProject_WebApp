@@ -19,8 +19,14 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-# Main Menu ---------------------------------------------------------------------------------
+# User Login ---------------------------------------------------------------------------------
 @app.route("/", methods=["GET", "POST"])
+def login():
+    return render_template("login.html")
+
+
+# Main Menu ---------------------------------------------------------------------------------
+@app.route("/index", methods=["GET", "POST"])
 def index():
     return render_template("main_index.html")
 
@@ -291,8 +297,6 @@ def meal_plan():
 
 
 
-
-
 ### Function2.2: Food Search
 @app.route("/diet/food", methods=["GET", "POST"])
 def food():
@@ -333,7 +337,6 @@ def recipe_detail(recipe_id):
         return render_template("2_diet/recipe_detail.html", recipe=recipe_info, formatted_recipe=formatted_recipe)
     else:
         return "Recipe not found", 404
-
 
 
 

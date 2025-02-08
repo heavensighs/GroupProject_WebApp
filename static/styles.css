@@ -1,4 +1,3 @@
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
@@ -27,6 +26,16 @@ body {
     margin-bottom: 20px; /* Adds space below the image */
     display: block;
 }
+
+form input.back-button {
+    background-color: transparent !important; /* 强制覆盖 */
+    border: none !important;                  
+    color: gray !important;
+    font-size: 0.9em !important;
+    cursor: pointer;
+}
+
+
 
 h2 {
     font-size: 24px;

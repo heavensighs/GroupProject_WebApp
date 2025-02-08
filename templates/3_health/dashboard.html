@@ -1,19 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operation feedback</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Feedback</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .message {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Operation feedback</h1>
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-        {% if nutrition_analysis %}
-            <h2>Nutritional analysis</h2>
-            <p>{{ nutrition_analysis }}</p>
-        {% endif %}
-        <a href="/health">Back to Health Home</a>
-    </div>
-</body>
 
+<div class="container">
+    <h1>📢 Operation Feedback</h1>
+
+    {% if message %}
+        <p class="message">✅ {{ message }}</p>
+    {% endif %}
+
+    {% if nutrition_analysis %}
+        <h2>🍏 Nutritional Analysis</h2>
+        <p>{{ nutrition_analysis }}</p>
+    {% endif %}
+
+    <a href="/health" class="back-link">Return to 🏥 Health Management System</a>
+</div>
+
+</body>
+</html>

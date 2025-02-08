@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Management</title>
+    <title>Health Management Login</title>
     <style>
         * {
             box-sizing: border-box;
@@ -26,51 +26,47 @@
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 400px;
             width: 90%;
         }
 
-        h1 {
+        h2 {
             color: #34495e;
-            font-size: 2em;
+            font-size: 1.8em;
             margin-bottom: 20px;
         }
 
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
         }
 
-        button {
+        input[type="submit"] {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 18px;
-            width: 100%;
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        input[type="submit"]:hover {
             background-color: #2980b9;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏥 Health Management System</h1>
-        <div class="button-group">
-            <button onclick="location.href='/health/update_weight_form'">⚖️ Update Weight</button>
-            <button onclick="location.href='/health/submit_exercise_form'">🏃 Submit Exercise Data</button>
-            <button onclick="location.href='/health/submit_food_form'">🍎 Submit Diet Data</button>
-            <button onclick="location.href='/health/generate_report'">📊 Generate Health Report</button>
-            <form action="/index" method="post">
-                <p><input type="submit" value="🔙 Back to Main Menu" class="back-button"></p>
-            </form>
-        </div>
+        <h2>Welcome to your Health Management System!</h2>
+        <p>Please enter username:</p>
+        <form action="/index" method="post">
+            <input type="text" name="q" placeholder="Username" required>
+            <input type="submit" value="Log In">
+        </form>
     </div>
 </body>
 </html>

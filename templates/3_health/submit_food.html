@@ -1,18 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit dietary data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Dietary Data</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            font-size: 1em;
+            color: #3498db;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Submit dietary data</h1>
-        <form action="/health/submit_food" method="POST">
-            <label for="food_list">Food list (comma separated): </label>
-            <input type="text" id="food_list" name="food_list" required>
-            <button type="submit">Submit dietary data</button>
-        </form>
-        <a href="/health">Back to Health Home</a>
-    </div>
+
+<div class="container">
+    <h1>🥗 Submit Dietary Data</h1>
+    <form action="/health/submit_food" method="POST">
+        <label for="food_list">Food List (comma separated):</label>
+        <input type="text" id="food_list" name="food_list" required>
+        <button type="submit">📥 Submit Dietary Data</button>
+    </form>
+    <a href="/health" class="back-link">Return to 🏥 Health Management System</a>
+</div>
+
 </body>
-
-
+</html>

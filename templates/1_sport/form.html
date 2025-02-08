@@ -57,6 +57,11 @@
         button:hover {
             background-color: #2980b9;
         }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +120,11 @@
 
         <button type="submit">Submit</button>
     </form>
+    <div class="button-group">
+        <form action="/sport" method="post">
+            <button type="submit" class="back-button">🏋️ Return to AI Workout Plan Menu</button>
+        </form>
+    </div>
 </div>
 
 </body>
